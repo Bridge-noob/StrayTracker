@@ -18,5 +18,5 @@ dependencies {
 }
 
 base {
-    archivesName = "guildmod-${mcVersion}"
+    archivesName = "StrayTracker-${mcVersion}"
 }
