@@ -1,18 +1,35 @@
-// StrayTracker build script — builds for either Minecraft 1.21.11 (Yarn mappings,
-// legacy remapping Loom) or 26.1.2 (unobfuscated, new non-remapping Loom).
-// Usage: gradle build -PmcVersion=1.21.11   (or 26.1.2; default 1.21.11)
+// StrayTracker build script — one build per Minecraft version, each producing its
+// own jar (e.g. StrayTracker-1.0.1+1.21.8.jar).
+// Usage: gradle build -PmcVersion=1.21.8   (1.21.11 / 26.1.2; default 1.21.11)
 
-def mcVersion = (findProperty('mcVersion') ?: '1.21.11').toString()
-def isNew = mcVersion.startsWith('26')
-ext.mcVersion = mcVersion
-
-if (isNew) {
-    apply plugin: 'net.fabricmc.fabric-loom'          // unobfuscated 26.x — no remapping
-} else {
-    apply plugin: 'net.fabricmc.fabric-loom-remap'    // obfuscated — remaps with Yarn
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabricmc.net/' }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        // Single Loom jar registers both plugin ids: net.fabricmc.fabric-loom (unobfuscated 26.x)
+        // and net.fabricmc.fabric-loom-remap (obfuscated, Yarn mappings).
+        classpath 'net.fabricmc:fabric-loom:1.19.3'
+    }
 }
 
-version = project.mod_version
+def mcVersion = (findProperty('mcVersion') ?: '1.21.11').toString()
+ext.mcVersion = mcVersion
+
+// Per-Minecraft-version configuration: Yarn build, Fabric API, ModMenu, source tree.
+def CONFIG = [
+    '1.21.8' : [yarn: '1.21.8+build.1',   fabricApi: '0.136.1+1.21.8',   modmenu: '15.0.2',           src: 'src/yarn8/java'],
+    '1.21.11': [yarn: '1.21.11+build.6', fabricApi: '0.141.6+1.21.11', modmenu: '17.0.1',           src: 'src/yarn11/java'],
+    '26.1.2' : [yarn: null,              fabricApi: '0.155.3+26.1.2',  modmenu: '21.0.0',           src: 'src/mojang/java'],
+]
+def cfg = CONFIG[mcVersion]
+def isNew = cfg.yarn == null   // 26.x is unobfuscated — no mappings, no remapping
+
+apply plugin: isNew ? 'net.fabricmc.fabric-loom' : 'net.fabricmc.fabric-loom-remap'
+
+version = "${project.mod_version}+${mcVersion}"
 group = project.group
 
 repositories {
@@ -21,38 +38,36 @@ repositories {
     maven { url 'https://maven.terraformersmc.com/releases/' }
 }
 
-def fabricApiVersion = isNew ? '0.155.3+26.1.2' : '0.141.6+1.21.11'
-def modmenuVersion = isNew ? '22.0.0-alpha.3' : '18.0.2'
-
-// HUD + hotkey sources: src/mojang/java (Mojang names) vs src/yarn/java (Yarn names).
 sourceSets.main.java {
-    srcDir isNew ? 'src/mojang/java' : 'src/yarn/java'
+    srcDir cfg.src
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${mcVersion}"
 
     if (isNew) {
-        // 26.x is unobfuscated: no mappings line, plain dependency scopes.
         implementation "net.fabricmc:fabric-loader:0.20.1"
-        implementation "net.fabricmc.fabric-api:fabric-api:${fabricApiVersion}"
-        compileOnly "com.terraformersmc:modmenu:${modmenuVersion}"
+        implementation "net.fabricmc.fabric-api:fabric-api:${cfg.fabricApi}"
+        compileOnly "com.terraformersmc:modmenu:${cfg.modmenu}"
     } else {
-        mappings "net.fabricmc:yarn:1.21.11+build.6:v2"
+        mappings "net.fabricmc:yarn:${cfg.yarn}:v2"
         modImplementation "net.fabricmc:fabric-loader:0.16.10"
-        modImplementation "net.fabricmc.fabric-api:fabric-api:${fabricApiVersion}"
-        modImplementation "com.terraformersmc:modmenu:${modmenuVersion}"
+        modImplementation "net.fabricmc.fabric-api:fabric-api:${cfg.fabricApi}"
+        modImplementation "com.terraformersmc:modmenu:${cfg.modmenu}"
     }
 }
 
-if (isNew) {
-    tasks.withType(JavaCompile).configureEach { options.release = 25 }
-    java {
-        sourceCompatibility = JavaVersion.VERSION_25
-        targetCompatibility = JavaVersion.VERSION_25
+def compileRelease = isNew ? 25 : 21
+tasks.withType(JavaCompile).configureEach { options.release = compileRelease }
+
+processResources {
+    def props = [version: "${project.mod_version}+${mcVersion}", mcVersion: mcVersion]
+    inputs.properties(props)
+    filesMatching('fabric.mod.json') {
+        expand(props)
     }
 }
 
 base {
-    archivesName = "StrayTracker-${mcVersion}"
+    archivesName = 'StrayTracker'
 }

@@ -2,7 +2,7 @@
 
 Tracks guild online counts from the server's `/guild online` output and records the **peak online count for each guild** between hotkey presses.
 
-**Minecraft:** 1.21.11 → 26.1.2 · **Loader:** Fabric 0.16.10+ · **License:** MIT
+- **Minecraft:** separate jars for 1.21.8, 1.21.11 and 26.1.2 · **Loader:** Fabric · **License:** MIT
 
 ## Features
 - **Auto-polling** — while tracking, automatically sends `/guild online` every N seconds (default 30s, configurable 10/15/30/60/120/300s)
@@ -14,9 +14,9 @@ Tracks guild online counts from the server's `/guild online` output and records 
 
 ## Build
 ```bash
-gradlew build -PmcVersion=26.1.2   # or 1.21.11
+gradle build -PmcVersion=1.21.8    # or 1.21.11, 26.1.2
 ```
-Output: `build/libs/StrayTracker-<mcVersion>.jar`
+Output: `build/libs/StrayTracker-1.0.1+<mcVersion>.jar` — each Minecraft version gets its own jar with its own version (`1.0.1+1.21.8`, `1.0.1+1.21.11`, `1.0.1+26.1.2`).
 
 Releases with prebuilt jars are produced automatically by GitHub Actions (`.github/workflows/build.yml`) on `v*` tags.
 
@@ -43,8 +43,9 @@ Drop the jar in `mods/` alongside Fabric Loader, Fabric API and ModMenu.
 
 ## File layout
 - `src/main/java/com/straytracker/` — shared code (config, parser, peak tracker, ModMenu entrypoint)
-- `src/yarn/java/com/straytracker/` — Yarn-mappings sources (used for 1.21.11 builds)
-- `src/mojang/java/com/straytracker/` — Mojang-names sources (used for unobfuscated 26.1.2 builds)
+- `src/yarn8/java/com/straytracker/` — Yarn sources for 1.21.8 (string-category `KeyBinding`)
+- `src/yarn11/java/com/straytracker/` — Yarn sources for 1.21.11 (`KeyBinding.Category`)
+- `src/mojang/java/com/straytracker/` — Mojang-names sources for unobfuscated 26.1.2
 - `StrayTrackerClient.java` — init, hotkey, auto-poll timer, chat listener
 - `StrayTrackerConfig.java` — JSON config
 - `StrayTrackerConfigScreen.java` — ModMenu screen

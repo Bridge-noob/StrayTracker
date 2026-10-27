@@ -9,8 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         include:
+          - mc: 1.21.8
+            java: '21'
           - mc: 1.21.11
             java: '21'
           - mc: 26.1.2
