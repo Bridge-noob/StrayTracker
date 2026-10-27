@@ -4,4 +4,9 @@ pluginManagement {
         mavenCentral()
         maven { url 'https://maven.fabricmc.net/' }
     }
+    plugins {
+        // Two Loom flavors (same version): remapping for obfuscated MC, plain for unobfuscated 26.x.
+        id 'net.fabricmc.fabric-loom' version '1.19.3'
+        id 'net.fabricmc.fabric-loom-remap' version '1.19.3'
+    }
 }

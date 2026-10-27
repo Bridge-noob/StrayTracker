@@ -25,14 +25,14 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '8.14'
+          gradle-version: '9.8.2'
 
       - name: Build
         run: gradle build -PmcVersion=${{ matrix.mc }} --no-daemon
 
       - name: Find jars
         id: jars
-        run: echo "jar=$(ls build/libs/*.jar | grep -v sources | head -1)" >> $GITHUB_OUTPUT
+        run: echo "jar=$(ls build/libs/*.jar | grep -v sources | tr '\n' ' ')" >> $GITHUB_OUTPUT
 
       - name: Attach to release
         if: startsWith(github.ref, 'refs/tags/')

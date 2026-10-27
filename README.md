@@ -42,6 +42,9 @@ Drop the jar in `mods/` alongside Fabric Loader, Fabric API and ModMenu.
 ```
 
 ## File layout
+- `src/main/java/com/straytracker/` — shared code (config, parser, peak tracker, ModMenu entrypoint)
+- `src/yarn/java/com/straytracker/` — Yarn-mappings sources (used for 1.21.11 builds)
+- `src/mojang/java/com/straytracker/` — Mojang-names sources (used for unobfuscated 26.1.2 builds)
 - `StrayTrackerClient.java` — init, hotkey, auto-poll timer, chat listener
 - `StrayTrackerConfig.java` — JSON config
 - `StrayTrackerConfigScreen.java` — ModMenu screen

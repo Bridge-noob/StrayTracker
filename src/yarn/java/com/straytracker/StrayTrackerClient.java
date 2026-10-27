@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
@@ -24,7 +23,7 @@ public class StrayTrackerClient implements ClientModInitializer {
     public void onInitializeClient() {
         StrayTrackerConfig.load();
         hotkey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.straytracker.toggle", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_MINUS, "category.straytracker"));
+                "key.straytracker.toggle", GLFW.GLFW_KEY_MINUS, KeyBinding.Category.MISC));
         overlay = new StrayTrackerHudOverlay(tracker);
 
         ClientTickEvents.END_CLIENT_TICK.register(this::onEndTick);

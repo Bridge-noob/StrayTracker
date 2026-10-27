@@ -1,12 +1,19 @@
-plugins {
-    id 'fabric-loom' version '1.10-SNAPSHOT'
+// StrayTracker build script — builds for either Minecraft 1.21.11 (Yarn mappings,
+// legacy remapping Loom) or 26.1.2 (unobfuscated, new non-remapping Loom).
+// Usage: gradle build -PmcVersion=1.21.11   (or 26.1.2; default 1.21.11)
+
+def mcVersion = (findProperty('mcVersion') ?: '1.21.11').toString()
+def isNew = mcVersion.startsWith('26')
+ext.mcVersion = mcVersion
+
+if (isNew) {
+    apply plugin: 'net.fabricmc.fabric-loom'          // unobfuscated 26.x — no remapping
+} else {
+    apply plugin: 'net.fabricmc.fabric-loom-remap'    // obfuscated — remaps with Yarn
 }
 
 version = project.mod_version
 group = project.group
-
-// Multi-version: pass -PmcVersion=<version> (default 26.1.2)
-def mcVersion = findProperty('mcVersion') ?: '26.1.2'
 
 repositories {
     mavenCentral()
@@ -14,12 +21,36 @@ repositories {
     maven { url 'https://maven.terraformersmc.com/releases/' }
 }
 
+def fabricApiVersion = isNew ? '0.155.3+26.1.2' : '0.141.6+1.21.11'
+def modmenuVersion = isNew ? '22.0.0-alpha.3' : '18.0.2'
+
+// HUD + hotkey sources: src/mojang/java (Mojang names) vs src/yarn/java (Yarn names).
+sourceSets.main.java {
+    srcDir isNew ? 'src/mojang/java' : 'src/yarn/java'
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${mcVersion}"
-    mappings "net.fabricmc:yarn:${mcVersion}+build.1:v2"
-    modImplementation "net.fabricmc:fabric-loader:0.16.10"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:0.119.6+${mcVersion}"
-    modCompileOnly "com.terraformersmc:modmenu:12.0.0-alpha.1"
+
+    if (isNew) {
+        // 26.x is unobfuscated: no mappings line, plain dependency scopes.
+        implementation "net.fabricmc:fabric-loader:0.20.1"
+        implementation "net.fabricmc.fabric-api:fabric-api:${fabricApiVersion}"
+        compileOnly "com.terraformersmc:modmenu:${modmenuVersion}"
+    } else {
+        mappings "net.fabricmc:yarn:1.21.11+build.6:v2"
+        modImplementation "net.fabricmc:fabric-loader:0.16.10"
+        modImplementation "net.fabricmc.fabric-api:fabric-api:${fabricApiVersion}"
+        modImplementation "com.terraformersmc:modmenu:${modmenuVersion}"
+    }
+}
+
+if (isNew) {
+    tasks.withType(JavaCompile).configureEach { options.release = 25 }
+    java {
+        sourceCompatibility = JavaVersion.VERSION_25
+        targetCompatibility = JavaVersion.VERSION_25
+    }
 }
 
 base {
