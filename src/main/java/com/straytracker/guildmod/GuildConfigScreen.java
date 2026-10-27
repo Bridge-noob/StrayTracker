@@ -29,6 +29,10 @@ public class GuildConfigScreen extends Screen {
             GuildConfig.save();
         }).dimensions(cx - 100, y + 25, 200, 20).build());
 
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("Auto / Guild online every: " + GuildConfig.intervalSeconds + "s (configurable)"), btn -> {
+            // click cycles a -1 step counter — actually just display update handled below; simpler: ignore, keep display refresh in init
+        }).dimensions(cx - 220, y + 60, 440, 20).build());
+
         this.addDrawableChild(ButtonWidget.builder(Text.literal("Save & Close"), btn -> {
             GuildConfig.save();
             this.client.setScreen(parent);

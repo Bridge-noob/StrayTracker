@@ -23,6 +23,7 @@ public class GuildModClient implements ClientModInitializer {
     private static KeyBinding hotkey;
     private static GuildHudOverlay overlay;
     private static boolean wasPressed = false;
+    private static int tickCounter = 0;
 
     @Override
     public void onInitializeClient() {
@@ -61,6 +62,21 @@ public class GuildModClient implements ClientModInitializer {
             // Auto-track if enabled
             if (!tracker.isTracking() && GuildConfig.autoTrack) {
                 tracker.start();
+            }
+
+            // Auto-send /guild online while tracking
+            if (tracker.isTracking()) {
+                tickCounter++;
+                int targetTicks = Math.max(10, GuildConfig.intervalSeconds) * 20; // 20 ticks/sec
+                if (tickCounter >= targetTicks) {
+                    tickCounter = 0;
+                    if (client.player != null && client.player.networkHandler != null) {
+                        client.player.networkHandler.sendChatCommand("guild online");
+                    }
+                    client.player.sendMessage(Text.literal("§a[GuildMod] Auto-requesting /guild online..."), false);
+                }
+            } else {
+                tickCounter = 0;
             }
         });
 

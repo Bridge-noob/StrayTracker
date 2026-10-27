@@ -10,6 +10,7 @@ public class GuildConfig {
     public static int hudY = 10;
     public static boolean autoTrack = true; // start tracking automatically
     public static int maxEntries = 40;
+    public static int intervalSeconds = 30;
 
     private static final Path PATH = Paths.get("config", "guildmod.json");
 
