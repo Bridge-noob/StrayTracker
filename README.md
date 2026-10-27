@@ -1,33 +1,52 @@
-# StrayTracker — Fabric 1.21.8 → 26.3
+# StrayTracker (Fabric mod)
+
+Tracks guild online counts from the server's `/guild online` output and records the **peak online count for each guild** between hotkey presses.
+
+**Minecraft:** 1.21.11 → 26.1.2 · **Loader:** Fabric 0.16.10+ · **License:** MIT
 
 ## Features
-- `/guild online` command (client-side; sends to server, parses chat output)
-- Auto-parses `Guilds Online Here` chat lines and extracts guild counts
-- Hotkey tracking (default `-`): press once to start tracking peaks, press again to stop and show overview
-- HUD overlay shows recording status and peak member counts (configurable via ModMenu)
-- Configurable position, HUD on/off, auto-track on load, max entries shown
-- Works across Fabric 1.21.8 to 26.3 with Yarn mappings
+- **Auto-polling** — while tracking, automatically sends `/guild online` every N seconds (default 30s, configurable 10/15/30/60/120/300s)
+- Parses `Guilds Online Here` chat output (e.g. `Forsaken [Forsaken] • 10/219 online`) into entries
+- **Hotkey `-`** (fully rebindable): 1st press starts tracking, 2nd press stops and prints a chat overview of the recorded peaks
+- **HUD overlay** — shows ● Tracking status while active; after stopping, shows the sorted peak-online list
+- **ModMenu config** — HUD on/off, auto-track on load, poll interval; HUD position (`hudX`/`hudY`) in `config/straytracker.json`
+- Auto-track on load option (starts tracking when the game launches)
 
 ## Build
 ```bash
-gradlew build
+gradlew build -PmcVersion=26.1.2   # or 1.21.11
 ```
-Output: `build/libs/StrayTracker-1.0.0.jar`
+Output: `build/libs/StrayTracker-<mcVersion>.jar`
+
+Releases with prebuilt jars are produced automatically by GitHub Actions (`.github/workflows/build.yml`) on `v*` tags.
 
 ## Install
-Place jar in `mods/` with Fabric Loader + Fabric API + ModMenu.
+Drop the jar in `mods/` alongside Fabric Loader, Fabric API and ModMenu.
 
 ## Usage
-1. Run `/guild online` in game (or let server show guild list)
-2. Press **-** (configurable in ModMenu) to start tracking
-3. Press **-** again to stop and get peak overview in chat + HUD
-4. Open ModMenu from Pause → Mods → StrayTracker for settings
+1. Join the server, press **`-`** → tracking starts, HUD shows ● Tracking
+2. Press **`-`** again → tracking stops, peak overview is printed in chat and stays on the HUD
+3. To disable auto-polling without stopping tracking, set `intervalSeconds` high; adjust everything in Mods → StrayTracker
 
-## File Layout
-- `StrayTrackerClient.java` — main init, tick, chat listener, hotkey
-- `GuildOnlineCommand.java` — `/guild online`
-- `GuildChatParser.java` — parses chat lines to entries
-- `PeakTracker.java` — records peak online/total per guild
-- `GuildHudOverlay.java` — draws HUD
-- `GuildConfigScreen.java` — ModMenu config screen
-- `GuildConfig.java` — JSON config
+## Config
+`config/straytracker.json`
+```json
+{
+  "hudEnabled": true,
+  "hudX": 10,
+  "hudY": 10,
+  "autoTrack": true,
+  "maxEntries": 40,
+  "intervalSeconds": 30
+}
+```
+
+## File layout
+- `StrayTrackerClient.java` — init, hotkey, auto-poll timer, chat listener
+- `StrayTrackerConfig.java` — JSON config
+- `StrayTrackerConfigScreen.java` — ModMenu screen
+- `StrayTrackerMenuIntegration.java` — ModMenu entrypoint
+- `StrayTrackerHudOverlay.java` — HUD rendering
+- `GuildChatParser.java` — chat → `GuildEntry` parsing
+- `GuildEntry.java` — parsed line record
+- `PeakTracker.java` — peak recording + sorted overview

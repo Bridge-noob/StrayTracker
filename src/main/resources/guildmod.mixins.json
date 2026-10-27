@@ -1,7 +1,0 @@
-{
-  "required": true,
-  "package": "com.straytracker.StrayTracker.mixin",
-  "compatibilityLevel": "JAVA_21",
-  "mixins": [],
-  "client": []
-}

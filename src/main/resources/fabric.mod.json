@@ -1,38 +1,35 @@
 {
   "schemaVersion": 1,
-  "id": "StrayTracker",
+  "id": "straytracker",
   "version": "${version}",
-  "name": "Guild Mod",
-  "description": "Tracks guild online members with /guild online, hotkey peak tracking, HUD overlay and ModMenu config.",
+  "name": "StrayTracker",
+  "description": "Tracks guild online counts via /guild online: auto-polls on a timer, records peak online counts per guild, shows a HUD overlay and a peak-overview on hotkey. Configurable via ModMenu.",
   "authors": ["StrayTracker"],
   "contact": {},
   "license": "MIT",
-  "icon": "assets/StrayTracker/textures/guild/icon.png",
+  "icon": "assets/straytracker/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "com.straytracker.StrayTracker.StrayTrackerClient"
+      "com.straytracker.StrayTrackerClient"
     ],
     "modmenu": [
-      "com.straytracker.StrayTracker.StrayTrackerMenuIntegration"
+      "com.straytracker.StrayTrackerMenuIntegration"
     ]
   },
   "mixins": [
-    "StrayTracker.mixins.json"
+    "straytracker.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.16.10",
-    "fabric-api": ">=0.119.6",
+    "fabric-api": "*",
     "minecraft": ">=1.21.11 <=26.1.2",
     "java": ">=21"
   },
   "suggests": {
     "modmenu": "*"
   },
-  "breaks": {},
   "custom": {
-    "modmenu:badges": [
-      "library"
-    ]
+    "modmenu:badges": ["library"]
   }
 }
