@@ -1,4 +1,4 @@
-package com.straytracker.guildmod;
+package com.straytracker.StrayTracker;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;

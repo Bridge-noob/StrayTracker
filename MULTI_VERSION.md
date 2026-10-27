@@ -14,7 +14,7 @@ for v in 1.21.11 1.21.8 26.1.2; do
 done
 ```
 
-Output: `build/libs/guildmod-<mcVersion>.jar`
+Output: `build/libs/StrayTracker-<mcVersion>.jar`
 
 ## Features
 - `/guild online`
@@ -28,6 +28,6 @@ Output: `build/libs/guildmod-<mcVersion>.jar`
 git init
 git add .
 git commit -m "Multi-version guild mod"
-git remote add origin https://github.com/YOURUSER/straytracker-guildmod.git
+git remote add origin https://github.com/YOURUSER/straytracker-StrayTracker.git
 git push -u origin main
 ```

@@ -1,4 +1,4 @@
-package com.straytracker.guildmod;
+package com.straytracker.StrayTracker;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;

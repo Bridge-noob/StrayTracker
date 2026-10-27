@@ -1,4 +1,4 @@
-package com.straytracker.guildmod;
+package com.straytracker.StrayTracker;
 
 import java.io.*;
 import java.nio.file.*;
@@ -12,7 +12,7 @@ public class GuildConfig {
     public static int maxEntries = 40;
     public static int intervalSeconds = 30;
 
-    private static final Path PATH = Paths.get("config", "guildmod.json");
+    private static final Path PATH = Paths.get("config", "StrayTracker.json");
 
     public static void load() {
         try {

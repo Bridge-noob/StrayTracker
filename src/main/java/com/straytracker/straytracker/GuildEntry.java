@@ -1,4 +1,4 @@
-package com.straytracker.guildmod;
+package com.straytracker.StrayTracker;
 
 public class GuildEntry {
     public final String guildName;

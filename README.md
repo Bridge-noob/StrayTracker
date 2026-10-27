@@ -12,7 +12,7 @@
 ```bash
 gradlew build
 ```
-Output: `build/libs/guildmod-1.0.0.jar`
+Output: `build/libs/StrayTracker-1.0.0.jar`
 
 ## Install
 Place jar in `mods/` with Fabric Loader + Fabric API + ModMenu.
@@ -24,7 +24,7 @@ Place jar in `mods/` with Fabric Loader + Fabric API + ModMenu.
 4. Open ModMenu from Pause → Mods → Guild Mod for settings
 
 ## File Layout
-- `GuildModClient.java` — main init, tick, chat listener, hotkey
+- `StrayTrackerClient.java` — main init, tick, chat listener, hotkey
 - `GuildOnlineCommand.java` — `/guild online`
 - `GuildChatParser.java` — parses chat lines to entries
 - `PeakTracker.java` — records peak online/total per guild

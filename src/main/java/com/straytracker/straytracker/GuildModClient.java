@@ -1,4 +1,4 @@
-package com.straytracker.guildmod;
+package com.straytracker.StrayTracker;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -18,7 +18,7 @@ import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 
 @Environment(EnvType.CLIENT)
-public class GuildModClient implements ClientModInitializer {
+public class StrayTrackerClient implements ClientModInitializer {
     public static PeakTracker tracker = new PeakTracker();
     private static KeyBinding hotkey;
     private static GuildHudOverlay overlay;
@@ -28,7 +28,7 @@ public class GuildModClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         // Initialize hotkey first
-        hotkey = new KeyBinding("key.guildmod.hotkey", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_MINUS, "category.guildmod");
+        hotkey = new KeyBinding("key.StrayTracker.hotkey", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_MINUS, "category.StrayTracker");
         net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper.registerKeyBinding(hotkey);
 
         GuildConfig.load();
@@ -73,7 +73,7 @@ public class GuildModClient implements ClientModInitializer {
                     if (client.player != null && client.player.networkHandler != null) {
                         client.player.networkHandler.sendChatCommand("guild online");
                     }
-                    client.player.sendMessage(Text.literal("§a[GuildMod] Auto-requesting /guild online..."), false);
+                    client.player.sendMessage(Text.literal("§a[StrayTracker] Auto-requesting /guild online..."), false);
                 }
             } else {
                 tickCounter = 0;
@@ -93,7 +93,7 @@ public class GuildModClient implements ClientModInitializer {
                 tracker.record(entries);
                 if (tracker.isTracking()) {
                     MinecraftClient.getInstance().player.sendMessage(
-                        Text.literal("§7[GuildMod] Recorded " + entries.size() + " guild entries (tracking...)"), false);
+                        Text.literal("§7[StrayTracker] Recorded " + entries.size() + " guild entries (tracking...)"), false);
                 }
             }
             return true;
