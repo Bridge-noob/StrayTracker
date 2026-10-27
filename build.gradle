@@ -1,0 +1,22 @@
+plugins {
+    id 'fabric-loom' version '1.10-SNAPSHOT'
+    id 'maven-publish'
+}
+
+version = '1.0.0'
+group = 'com.straytracker'
+
+// Multi-version: pass -PmcVersion=26.1.2 or 1.21.11 etc.
+def mcVersion = findProperty('mcVersion') ?: '26.1.2'
+
+dependencies {
+    minecraft "com.mojang:minecraft:${mcVersion}"
+    mappings "net.fabricmc:yarn:${mcVersion}:v2"
+    modImplementation "net.fabricmc:fabric-loader:0.16.10"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:0.119.6+${mcVersion}"
+    modCompileOnly "com.terraformersmc:modmenu:12.0.0-alpha.1"
+}
+
+base {
+    archivesName = "guildmod-${mcVersion}"
+}

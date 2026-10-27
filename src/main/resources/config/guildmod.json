@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "options": {
+    "hotkeyKey": 66,
+    "hudEnabled": true,
+    "hudX": 10,
+    "hudY": 10,
+    "autoTrack": true,
+    "maxEntries": 40
+  }
+}

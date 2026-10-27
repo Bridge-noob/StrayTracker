@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "guildmod",
+  "version": "${version}",
+  "name": "Guild Mod",
+  "description": "Tracks guild online members with /guild online, hotkey peak tracking, HUD overlay and ModMenu config.",
+  "authors": ["StrayTracker"],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/guildmod/textures/guild/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.straytracker.guildmod.GuildModClient"
+    ],
+    "modmenu": [
+      "com.straytracker.guildmod.GuildModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "guildmod.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "fabric-api": ">=0.119.6",
+    "minecraft": ">=1.21.11 <=26.1.2",
+    "java": ">=21"
+  },
+  "suggests": {
+    "modmenu": "*"
+  },
+  "breaks": {},
+  "custom": {
+    "modmenu:badges": [
+      "library"
+    ]
+  }
+}
