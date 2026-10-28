@@ -1,32 +1,44 @@
-# StrayTracker (Fabric mod)
+<div align="center">
 
-Tracks guild online counts from the server's `/guild online` output and records the **peak online count for each guild** between hotkey presses.
+# StrayTracker
 
-- **Minecraft:** separate jars for 1.21.8, 1.21.11 and 26.1.2 · **Loader:** Fabric · **License:** MIT
+*A Fabric client mod that tracks each guild's peak online count from `/guild online`.*
 
-## Features
-- **Auto-polling** — while tracking, automatically sends `/guild online` every N seconds (default 30s, configurable 10/15/30/60/120/300s)
-- Parses `Guilds Online Here` chat output (e.g. `Forsaken [Forsaken] • 10/219 online`) into entries
-- **Hotkey `-`** (fully rebindable): 1st press starts tracking, 2nd press stops and prints a chat overview of the recorded peaks
-- **HUD overlay** — shows ● Tracking status while active; after stopping, shows the sorted peak-online list
-- **ModMenu config** — HUD on/off, auto-track on load, poll interval; HUD position (`hudX`/`hudY`) in `config/straytracker.json`
-- Auto-track on load option (starts tracking when the game launches)
+[![Build](https://github.com/Bridge-noob/StrayTracker/actions/workflows/build.yml/badge.svg)](https://github.com/Bridge-noob/StrayTracker/actions/workflows/build.yml)
+[![Latest release](https://img.shields.io/github/v/release/Bridge-noob/StrayTracker?sort=semver)](https://github.com/Bridge-noob/StrayTracker/releases/latest)
+[![Minecraft](https://img.shields.io/badge/Minecraft-1.21.8%20|%201.21.11%20|%2026.1.2-brightgreen)](#download)
+[![License](https://img.shields.io/github/license/Bridge-noob/StrayTracker)](LICENSE)
 
-## Build
-```bash
-gradle build -PmcVersion=1.21.8    # or 1.21.11, 26.1.2
-```
-Output: `build/libs/StrayTracker-1.0.1+<mcVersion>.jar` — each Minecraft version gets its own jar with its own version (`1.0.1+1.21.8`, `1.0.1+1.21.11`, `1.0.1+26.1.2`).
+</div>
 
-Releases with prebuilt jars are produced automatically by GitHub Actions (`.github/workflows/build.yml`) on `v*` tags.
+Press **`-`** to start tracking, press it again to stop and get a **peak overview** — the highest online/total count every guild reached while you watched.
+
+## Download
+
+Grab the jar for **your** game version from the [latest release](https://github.com/Bridge-noob/StrayTracker/releases/latest):
+
+| File | Minecraft | Fabric API | Java |
+|---|---|---|---|
+| `StrayTracker-1.0.1.1.21.8.jar` | 1.21.8 | 0.136.1+1.21.8 | 21+ |
+| `StrayTracker-1.0.1.1.21.11.jar` | 1.21.11 | 0.141.6+1.21.11 | 21+ |
+| `StrayTracker-1.0.1.26.1.2.jar` | 26.1.2 | 0.155.3+26.1.2 | 21+ |
 
 ## Install
-Drop the jar in `mods/` alongside Fabric Loader, Fabric API and ModMenu.
+1. Install [Fabric Loader](https://fabricmc.net/use/installer/) for your Minecraft version
+2. Drop **Fabric API** and the matching **StrayTracker** jar into `mods/`
+3. *(optional)* [ModMenu](https://modrinth.com/mod/modmenu) — enables the in-game config screen
+
+## Features
+- **Auto-polling** — while tracking, automatically sends `/guild online` every N seconds (default 30s; 10/15/30/60/120/300s in config)
+- Parses the `Guilds Online Here` chat output (e.g. `Forsaken [Forsaken] • 10/219 online`) into entries
+- **Hotkey `-`** (rebindable under *Options → Controls → StrayTracker*): 1st press starts, 2nd press stops and prints the recorded peaks in chat
+- **HUD overlay** — `● Tracking` status while active; after stopping, the sorted peak-online list
+- **ModMenu config** — HUD on/off, auto-track on load, poll interval; HUD position (`hudX`/`hudY`) in `config/straytracker.json`
 
 ## Usage
-1. Join the server, press **`-`** → tracking starts, HUD shows ● Tracking
-2. Press **`-`** again → tracking stops, peak overview is printed in chat and stays on the HUD
-3. To disable auto-polling without stopping tracking, set `intervalSeconds` high; adjust everything in Mods → StrayTracker
+1. Join the server and press **`-`** → tracking starts, HUD shows ● Tracking
+2. Press **`-`** again → tracking stops, the peak overview is printed in chat and stays on the HUD
+3. Everything else: *Mods → StrayTracker → Config* (or edit `config/straytracker.json`)
 
 ## Config
 `config/straytracker.json`
@@ -41,16 +53,21 @@ Drop the jar in `mods/` alongside Fabric Loader, Fabric API and ModMenu.
 }
 ```
 
-## File layout
-- `src/main/java/com/straytracker/` — shared code (config, parser, peak tracker, ModMenu entrypoint)
-- `src/yarn8/java/com/straytracker/` — Yarn sources for 1.21.8 (string-category `KeyBinding`)
-- `src/yarn11/java/com/straytracker/` — Yarn sources for 1.21.11 (`KeyBinding.Category`)
-- `src/mojang/java/com/straytracker/` — Mojang-names sources for unobfuscated 26.1.2
-- `StrayTrackerClient.java` — init, hotkey, auto-poll timer, chat listener
-- `StrayTrackerConfig.java` — JSON config
-- `StrayTrackerConfigScreen.java` — ModMenu screen
-- `StrayTrackerMenuIntegration.java` — ModMenu entrypoint
-- `StrayTrackerHudOverlay.java` — HUD rendering
-- `GuildChatParser.java` — chat → `GuildEntry` parsing
-- `GuildEntry.java` — parsed line record
-- `PeakTracker.java` — peak recording + sorted overview
+## Building
+```bash
+gradle build -PmcVersion=1.21.8    # or 1.21.11 / 26.1.2
+```
+Output: `build/libs/StrayTracker-1.0.1+<mcVersion>.jar` — one jar per Minecraft version, each versioned `1.0.1+<mcVersion>`. Java: 21 for 1.21.x, 25 for 26.x. Jars for release tags are built automatically by [GitHub Actions](.github/workflows/build.yml).
+
+## Project layout
+| Path | Contents |
+|---|---|
+| `src/main/java/com/straytracker/` | shared code — `StrayTrackerConfig`, `GuildChatParser`, `GuildEntry`, `PeakTracker`, `StrayTrackerMenuIntegration` |
+| `src/yarn8/java/com/straytracker/` | client sources for 1.21.8 (Yarn names, string-category `KeyBinding`) |
+| `src/yarn11/java/com/straytracker/` | client sources for 1.21.11 (Yarn names, `KeyBinding.Category`) |
+| `src/mojang/java/com/straytracker/` | client sources for 26.1.2 (unobfuscated, Mojang names) |
+
+Each client tree contains `StrayTrackerClient` (entrypoint, hotkey, auto-poll timer, chat listener), `StrayTrackerHudOverlay` (HUD) and `StrayTrackerConfigScreen` (ModMenu screen).
+
+## License
+[MIT](LICENSE)
