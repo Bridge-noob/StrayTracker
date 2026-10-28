@@ -58,7 +58,9 @@ public final class StrayTrackerConfigScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
+        // super.render() already renders the background (incl. the 1.21.6+ menu blur,
+        // which may only be applied once per frame — calling renderBackground() here too
+        // crashed with "Can only blur once per frame" on 1.21.11).
         super.render(context, mouseX, mouseY, delta);
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 20, 0xFFFFFF);
     }
