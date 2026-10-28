@@ -25,6 +25,9 @@ public final class StrayTrackerHudOverlay {
         int x = StrayTrackerConfig.hudX;
         int y = StrayTrackerConfig.hudY;
 
+        // DIAGNOSTIC: must render if the overlay method is being called at all
+        context.drawText(font, "§4§lSTRAYTRACKER OVERLAY ACTIVE §r", x, y - 12, 0xFF4444, true);
+
         if (tracker.isTracking()) {
             context.drawText(font, "§a● Started — polling /guild online every "
                     + StrayTrackerConfig.intervalSeconds + "s", x, y, 0xFFFFFF, true);
