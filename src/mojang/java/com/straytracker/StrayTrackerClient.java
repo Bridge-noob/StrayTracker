@@ -11,7 +11,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import org.lwjgl.glfw.GLFW;
 
 import com.mojang.blaze3d.platform.InputConstants;
 
@@ -20,7 +19,7 @@ public class StrayTrackerClient implements ClientModInitializer {
     public static PeakTracker tracker = new PeakTracker();
     private static final KeyMapping.Category CATEGORY =
             KeyMapping.Category.register(Identifier.fromNamespaceAndPath("straytracker", "category"));
-    private KeyMapping hotkey;
+    public static KeyMapping hotkey;
     private StrayTrackerHudOverlay overlay;
     private int autoRequestTimer = 0;
     private boolean autoTrackStarted = false;
@@ -29,7 +28,7 @@ public class StrayTrackerClient implements ClientModInitializer {
     public void onInitializeClient() {
         StrayTrackerConfig.load();
         hotkey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-                "key.straytracker.toggle", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_MINUS, CATEGORY));
+                "key.straytracker.toggle", InputConstants.Type.KEYSYM, StrayTrackerConfig.hotkeyCode, CATEGORY));
         overlay = new StrayTrackerHudOverlay(tracker);
 
         ClientTickEvents.END_CLIENT_TICK.register(this::onEndTick);

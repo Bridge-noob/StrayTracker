@@ -11,12 +11,11 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
-import org.lwjgl.glfw.GLFW;
 
 @Environment(EnvType.CLIENT)
 public class StrayTrackerClient implements ClientModInitializer {
     public static PeakTracker tracker = new PeakTracker();
-    private KeyBinding hotkey;
+    public static KeyBinding hotkey;
     private StrayTrackerHudOverlay overlay;
     private int autoRequestTimer = 0;
     private boolean autoTrackStarted = false;
@@ -25,7 +24,7 @@ public class StrayTrackerClient implements ClientModInitializer {
     public void onInitializeClient() {
         StrayTrackerConfig.load();
         hotkey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.straytracker.toggle", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_MINUS, "category.straytracker"));
+                "key.straytracker.toggle", InputUtil.Type.KEYSYM, StrayTrackerConfig.hotkeyCode, "category.straytracker"));
         overlay = new StrayTrackerHudOverlay(tracker);
 
         ClientTickEvents.END_CLIENT_TICK.register(this::onEndTick);

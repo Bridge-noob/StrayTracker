@@ -13,6 +13,8 @@ public final class StrayTrackerConfig {
     static int maxEntries = 40;
     /** Seconds between automatic /guild online requests while tracking. */
     static int intervalSeconds = 30;
+    /** GLFW key code of the tracking toggle hotkey (45 = GLFW_KEY_MINUS). */
+    static int hotkeyCode = 45;
 
     private static final Path FILE = Paths.get("config", "straytracker.json");
     private static final int[] INTERVAL_CHOICES = {10, 15, 30, 60, 120, 300};
@@ -35,6 +37,7 @@ public final class StrayTrackerConfig {
             maxEntries = readInt(s, "maxEntries", maxEntries);
             intervalSeconds = readInt(s, "intervalSeconds", intervalSeconds);
             if (intervalSeconds < 5) intervalSeconds = 5;
+            hotkeyCode = readInt(s, "hotKeyCode", hotkeyCode);
         } catch (Exception ignored) {
         }
     }
@@ -49,7 +52,8 @@ public final class StrayTrackerConfig {
                     "  \"hudY\": " + hudY + ",\n" +
                     "  \"autoTrack\": " + autoTrack + ",\n" +
                     "  \"maxEntries\": " + maxEntries + ",\n" +
-                    "  \"intervalSeconds\": " + intervalSeconds + "\n" +
+                    "  \"intervalSeconds\": " + intervalSeconds + ",\n" +
+                    "  \"hotKeyCode\": " + hotkeyCode + "\n" +
                     "}\n");
         } catch (Exception ignored) {
         }
