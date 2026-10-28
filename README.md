@@ -19,9 +19,9 @@ Grab the jar for **your** game version from the [latest release](https://github.
 
 | File | Minecraft | Fabric API | Java |
 |---|---|---|---|
-| `StrayTracker-1.0.1.1.21.8.jar` | 1.21.8 | 0.136.1+1.21.8 | 21+ |
-| `StrayTracker-1.0.1.1.21.11.jar` | 1.21.11 | 0.141.6+1.21.11 | 21+ |
-| `StrayTracker-1.0.1.26.1.2.jar` | 26.1.2 | 0.155.3+26.1.2 | 21+ |
+| `StrayTracker-1.0.1+1.21.8.jar` | 1.21.8 | 0.136.1+1.21.8 | 21+ |
+| `StrayTracker-1.0.1+1.21.11.jar` | 1.21.11 | 0.141.6+1.21.11 | 21+ |
+| `StrayTracker-1.0.1+26.1.2.jar` | 26.1.2 | 0.155.3+26.1.2 | 21+ |
 
 ## Install
 1. Install [Fabric Loader](https://fabricmc.net/use/installer/) for your Minecraft version
