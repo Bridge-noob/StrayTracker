@@ -14,10 +14,13 @@ jobs:
         include:
           - mc: 1.21.8
             java: '21'
+            gradle: '9.1.0'
           - mc: 1.21.11
             java: '21'
+            gradle: '9.1.0'
           - mc: 26.1.2
             java: '25'
+            gradle: '9.8.2'
     steps:
       - uses: actions/checkout@v4
 
@@ -28,7 +31,7 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '9.8.2'
+          gradle-version: ${{ matrix.gradle }}
 
       - name: Build
         run: gradle build -PmcVersion=${{ matrix.mc }} --no-daemon
@@ -42,5 +45,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: ${{ steps.jars.outputs.jar }}
+          overwrite_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

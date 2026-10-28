@@ -47,8 +47,8 @@ public class StrayTrackerClient implements ClientModInitializer {
             tracker.record(entries);
             var player = Minecraft.getInstance().player;
             if (player != null && tracker.isTracking()) {
-                player.displayClientMessage(Component.literal(
-                        "§7[StrayTracker] Recorded " + entries.size() + " guild entr" + (entries.size() == 1 ? "y" : "ies") + "."), false);
+                player.sendSystemMessage(Component.literal(
+                        "§7[StrayTracker] Recorded " + entries.size() + " guild entr" + (entries.size() == 1 ? "y" : "ies") + "."));
             }
             return true;
         });
@@ -68,8 +68,7 @@ public class StrayTrackerClient implements ClientModInitializer {
                 autoRequestTimer = 0;
                 player.sendSystemMessage(Component.literal("§aTracking started — auto-polling /guild online every "
                         + StrayTrackerConfig.intervalSeconds + "s."));
-            }
-        }
+            }        }
 
         // Safety net: if auto-track is on, keep tracking active
         if (StrayTrackerConfig.autoTrack && !tracker.isTracking()) {

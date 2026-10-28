@@ -2,6 +2,9 @@
 // own jar (e.g. StrayTracker-1.0.1+1.21.8.jar).
 // Usage: gradle build -PmcVersion=1.21.8   (1.21.11 / 26.1.2; default 1.21.11)
 
+def mcVersion = (findProperty('mcVersion') ?: '1.21.11').toString()
+ext.mcVersion = mcVersion
+
 buildscript {
     repositories {
         maven { url 'https://maven.fabricmc.net/' }
@@ -9,14 +12,14 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        // Single Loom jar registers both plugin ids: net.fabricmc.fabric-loom (unobfuscated 26.x)
-        // and net.fabricmc.fabric-loom-remap (obfuscated, Yarn mappings).
-        classpath 'net.fabricmc:fabric-loom:1.19.3'
+        // Loom 1.19.3 (single jar, registers both plugin ids) requires a JVM 25 Gradle daemon.
+        // For the Java 21 targets use Loom 1.13.3 (still fully supports MC 1.21.x).
+        def _mc = (findProperty('mcVersion') ?: '1.21.11').toString()
+        classpath _mc.startsWith('26')
+                ? 'net.fabricmc:fabric-loom:1.19.3'    // unobfuscated 26.x — no remapping
+                : 'net.fabricmc:fabric-loom:1.13.3'    // obfuscated — remaps with Yarn
     }
 }
-
-def mcVersion = (findProperty('mcVersion') ?: '1.21.11').toString()
-ext.mcVersion = mcVersion
 
 // Per-Minecraft-version configuration: Yarn build, Fabric API, ModMenu, source tree.
 def CONFIG = [
@@ -27,7 +30,7 @@ def CONFIG = [
 def cfg = CONFIG[mcVersion]
 def isNew = cfg.yarn == null   // 26.x is unobfuscated — no mappings, no remapping
 
-apply plugin: isNew ? 'net.fabricmc.fabric-loom' : 'net.fabricmc.fabric-loom-remap'
+apply plugin: isNew ? 'net.fabricmc.fabric-loom' : 'fabric-loom'
 
 version = "${project.mod_version}+${mcVersion}"
 group = project.group

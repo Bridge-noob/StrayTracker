@@ -18,7 +18,7 @@ public final class StrayTrackerHudOverlay {
         if (!StrayTrackerConfig.hudEnabled) return;
 
         Minecraft client = Minecraft.getInstance();
-        if (client.options.hidden || client.player == null) return;
+        if (client.options.hideGui || client.player == null) return;
 
         var font = client.font;
         int x = StrayTrackerConfig.hudX;
