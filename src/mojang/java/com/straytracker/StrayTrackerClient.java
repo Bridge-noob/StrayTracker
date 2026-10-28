@@ -23,6 +23,7 @@ public class StrayTrackerClient implements ClientModInitializer {
     private KeyMapping hotkey;
     private StrayTrackerHudOverlay overlay;
     private int autoRequestTimer = 0;
+    private boolean autoTrackStarted = false;
 
     @Override
     public void onInitializeClient() {
@@ -56,9 +57,13 @@ public class StrayTrackerClient implements ClientModInitializer {
 
     private void onEndTick(Minecraft client) {
         var player = client.player;
-        if (player == null) return;
+        if (player == null) {
+            // Left the world — let auto-track engage again on the next world join.
+            autoTrackStarted = false;
+            return;
+        }
 
-        // Hotkey [-]: toggle tracking
+        // Hotkey [-]: toggle tracking (works freely even with auto-track on)
         while (hotkey.consumeClick()) {
             if (tracker.isTracking()) {
                 tracker.stop();
@@ -68,12 +73,16 @@ public class StrayTrackerClient implements ClientModInitializer {
                 autoRequestTimer = 0;
                 player.sendSystemMessage(Component.literal("§aTracking started — auto-polling /guild online every "
                         + StrayTrackerConfig.intervalSeconds + "s."));
-            }        }
+            }
+        }
 
-        // Safety net: if auto-track is on, keep tracking active
-        if (StrayTrackerConfig.autoTrack && !tracker.isTracking()) {
+        // Auto-track: start once per world join. (Previously this re-asserted every tick,
+        // which instantly undid the hotkey's stop — tracking could never be stopped.)
+        if (StrayTrackerConfig.autoTrack && !autoTrackStarted && !tracker.isTracking()) {
             tracker.start();
+            autoTrackStarted = true;
             autoRequestTimer = 0;
+            player.sendSystemMessage(Component.literal("§7[StrayTracker] §aAuto-tracking started — press §f-§a to stop."));
         }
 
         // Auto-send "/guild online" on a timer while tracking
