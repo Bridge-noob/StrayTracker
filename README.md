@@ -32,7 +32,7 @@ Grab the jar for **your** game version from the [latest release](https://github.
 - **Auto-polling** — while tracking, automatically sends `/guild online` every N seconds (default 30s; 10/15/30/60/120/300s in config)
 - Parses the `Guilds Online Here` chat output (e.g. `Forsaken [Forsaken] • 10/219 online`) into entries
 - **Hotkey `-`** (rebindable — in *Options → Controls* or directly in the mod's config screen): 1st press starts, 2nd press stops and prints the recorded peaks in chat
-- **HUD overlay** — `● Tracking` status while active; after stopping, the sorted peak-online list
+- **HUD overlay** — `● Started` status + **live** peak list while tracking; after stopping, the final sorted list stays on screen
 - **ModMenu config** — HUD on/off, auto-track on join (starts once when you join a world — the hotkey can stop it anytime), poll interval, hotkey rebinding; HUD position (`hudX`/`hudY`) in `config/straytracker.json`
 
 ## Usage
