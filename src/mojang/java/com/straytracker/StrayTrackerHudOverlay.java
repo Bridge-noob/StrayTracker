@@ -26,7 +26,8 @@ public final class StrayTrackerHudOverlay {
         int y = StrayTrackerConfig.hudY;
 
         // DIAGNOSTIC: must render if the overlay method is being called at all
-        graphics.text(font, "§4§lSTRAYTRACKER OVERLAY ACTIVE §r", x, y - 12, 0xFFFF4444, true);
+        // (clamped so it is never drawn off-screen — old value y-12 landed at y=-2 with default hudY=10)
+        graphics.text(font, "§4§lSTRAYTRACKER OVERLAY ACTIVE §r", x, Math.max(y - 12, 40), 0xFFFF4444, true);
 
         if (tracker.isTracking()) {
             graphics.text(font, "§a● Started — polling /guild online every "
