@@ -76,8 +76,17 @@ public final class PeakTracker {
                 if (e.online() > p[0]) p[0] = e.online();
                 if (e.total() > p[1]) p[1] = e.total();
             }
-            guildOnlinePeak = Math.max(guildOnlinePeak, e.online());
+            if (isTrackedGuild(e)) {
+                guildOnlinePeak = Math.max(guildOnlinePeak, e.online());
+            }
         }
+    }
+
+    /** Whether the given guild entry belongs to the tracked guild (empty = all). */
+    private boolean isTrackedGuild(GuildEntry e) {
+        String g = StrayTrackerConfig.guildName;
+        if (g == null || g.isEmpty()) return true;
+        return e.name().equalsIgnoreCase(g) || e.tag().equalsIgnoreCase(g);
     }
 
     public boolean hasData() {

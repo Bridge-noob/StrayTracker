@@ -15,6 +15,8 @@ public final class StrayTrackerConfig {
     static int intervalSeconds = 30;
     /** GLFW key code of the tracking toggle hotkey (45 = GLFW_KEY_MINUS). */
     static int hotkeyCode = 45;
+    /** Name of the guild to track (e.g. "Valor"). Empty string tracks all guilds. */
+    static String guildName = "Valor";
 
     private static final Path FILE = Paths.get("config", "straytracker.json");
     private static final int[] INTERVAL_CHOICES = {10, 15, 30, 60, 120, 300};
@@ -38,6 +40,7 @@ public final class StrayTrackerConfig {
             intervalSeconds = readInt(s, "intervalSeconds", intervalSeconds);
             if (intervalSeconds < 5) intervalSeconds = 5;
             hotkeyCode = readInt(s, "hotKeyCode", hotkeyCode);
+            guildName = readString(s, "guildName", guildName);
         } catch (Exception ignored) {
         }
     }
@@ -53,7 +56,8 @@ public final class StrayTrackerConfig {
                     "  \"autoTrack\": " + autoTrack + ",\n" +
                     "  \"maxEntries\": " + maxEntries + ",\n" +
                     "  \"intervalSeconds\": " + intervalSeconds + ",\n" +
-                    "  \"hotKeyCode\": " + hotkeyCode + "\n" +
+                    "  \"hotKeyCode\": " + hotkeyCode + ",\n" +
+                    "  \"guildName\": \"" + guildName + "\"\n" +
                     "}\n");
         } catch (Exception ignored) {
         }
@@ -74,6 +78,18 @@ public final class StrayTrackerConfig {
         try {
             String tail = json.split("\"" + key + "\"\\s*:\\s*", 2)[1];
             return tail.startsWith("true");
+        } catch (Exception e) {
+            return fallback;
+        }
+    }
+
+    private static String readString(String json, String key, String fallback) {
+        try {
+            String tail = json.split("\"" + key + "\"\\s*:\\s*", 2)[1];
+            int end = tail.indexOf(',');
+            if (end < 0) end = tail.indexOf('}');
+            if (end < 0) end = tail.length();
+            return tail.substring(1, end).trim().replaceAll("\\\\\"", "\"");
         } catch (Exception e) {
             return fallback;
         }
