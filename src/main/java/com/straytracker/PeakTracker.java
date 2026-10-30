@@ -13,14 +13,17 @@ public final class PeakTracker {
     private final Map<String, int[]> peaks = new LinkedHashMap<>(); // key -> {online, total}
     /** Distinct guild members currently considered online (from join/leave messages). */
     private final Set<String> onlineGuildMembers = new HashSet<>();
-    /** Overall peak of concurrently-online distinct guild members (from join/leave messages). */
+    /** Running peak of distinct guild members online (from join/leave messages). */
     private int joinLeavePeak = 0;
+    /** Highest /guild online snapshot count seen during tracking. */
+    private int guildOnlinePeak = 0;
 
     public void start() {
         tracking = true;
         peaks.clear();
         onlineGuildMembers.clear();
         joinLeavePeak = 0;
+        guildOnlinePeak = 0;
     }
 
     public void stop() {
@@ -48,9 +51,19 @@ public final class PeakTracker {
         return joinLeavePeak;
     }
 
+    /** Highest /guild online snapshot count seen during tracking. */
+    public int getGuildOnlinePeak() {
+        return guildOnlinePeak;
+    }
+
     /** Currently-tracked number of distinct guild members online (from join/leave messages). */
     public int getOnlineGuildCount() {
         return onlineGuildMembers.size();
+    }
+
+    /** Overall peak = max of the /guild online snapshots and the join/leave derived count. */
+    public int getOverallPeak() {
+        return Math.max(guildOnlinePeak, joinLeavePeak);
     }
 
     public void record(List<GuildEntry> entries) {
@@ -63,6 +76,7 @@ public final class PeakTracker {
                 if (e.online() > p[0]) p[0] = e.online();
                 if (e.total() > p[1]) p[1] = e.total();
             }
+            guildOnlinePeak = Math.max(guildOnlinePeak, e.online());
         }
     }
 
@@ -79,7 +93,7 @@ public final class PeakTracker {
 
     public String getOverview() {
         StringBuilder sb = new StringBuilder();
-        sb.append("§7Overall peak (join/leave): §a").append(joinLeavePeak).append("\n");
+        sb.append("§7Overall peak: §a").append(getOverallPeak()).append("\n");
         if (peaks.isEmpty()) {
             sb.append("§7No data recorded yet.");
         }

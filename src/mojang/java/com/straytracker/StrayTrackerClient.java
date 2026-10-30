@@ -49,7 +49,7 @@ public class StrayTrackerClient implements ClientModInitializer {
                     joinPlayer.sendSystemMessage(Component.literal(
                             "§7[StrayTracker] §a" + player + " joined the server. "
                                     + "Online guild members: " + tracker.getOnlineGuildCount()
-                                    + " (peak: " + tracker.getJoinLeavePeak() + ")."));
+                                    + " (peak: " + tracker.getOverallPeak() + ")."));
                 }
                 return true;
             }
@@ -61,7 +61,7 @@ public class StrayTrackerClient implements ClientModInitializer {
                     leavePlayer.sendSystemMessage(Component.literal(
                             "§7[StrayTracker] §c" + player + " left the server. "
                                     + "Online guild members: " + tracker.getOnlineGuildCount()
-                                    + " (peak: " + tracker.getJoinLeavePeak() + ")."));
+                                    + " (peak: " + tracker.getOverallPeak() + ")."));
                 }
                 return true;
             }

@@ -32,12 +32,12 @@ public final class StrayTrackerHudOverlay {
             context.drawText(font, "§a● Started — polling /guild online every "
                     + StrayTrackerConfig.intervalSeconds + "s", x, y, 0xFFFFFF, true);
             int rows = drawPeaks(context, font, x, y + 10, true);
-            context.drawText(font, "§7Overall peak (join/leave): §a" + tracker.getJoinLeavePeak(),
+            context.drawText(font, "§7Overall peak: §a" + tracker.getOverallPeak(),
                     x, y + 10 + rows * 10 + 2, 0xFFFFFF, true);
         } else if (tracker.hasData()) {
             context.drawText(font, "§c● Stopped", x, y, 0xFFFFFF, true);
             int rows = drawPeaks(context, font, x, y + 10, false);
-            context.drawText(font, "§7Overall peak (join/leave): §a" + tracker.getJoinLeavePeak(),
+            context.drawText(font, "§7Overall peak: §a" + tracker.getOverallPeak(),
                     x, y + 10 + rows * 10 + 2, 0xFFFFFF, true);
         }
     }
