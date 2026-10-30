@@ -39,6 +39,33 @@ public class StrayTrackerClient implements ClientModInitializer {
 
         ClientReceiveMessageEvents.ALLOW_GAME.register((message, overlayVisible) -> {
             String raw = message.getString();
+
+            // Join / leave tracking -> overall peak of distinct guild members online.
+            if (GuildChatParser.isGuildJoinOutput(raw)) {
+                String player = GuildChatParser.parseJoinPlayer(raw);
+                tracker.recordJoin(player);
+                var joinPlayer = Minecraft.getInstance().player;
+                if (joinPlayer != null && tracker.isTracking()) {
+                    joinPlayer.sendSystemMessage(Component.literal(
+                            "§7[StrayTracker] §a" + player + " joined the server. "
+                                    + "Online guild members: " + tracker.getOnlineGuildCount()
+                                    + " (peak: " + tracker.getJoinLeavePeak() + ")."));
+                }
+                return true;
+            }
+            if (GuildChatParser.isGuildLeaveOutput(raw)) {
+                String player = GuildChatParser.parseLeavePlayer(raw);
+                tracker.recordLeave(player);
+                var leavePlayer = Minecraft.getInstance().player;
+                if (leavePlayer != null && tracker.isTracking()) {
+                    leavePlayer.sendSystemMessage(Component.literal(
+                            "§7[StrayTracker] §c" + player + " left the server. "
+                                    + "Online guild members: " + tracker.getOnlineGuildCount()
+                                    + " (peak: " + tracker.getJoinLeavePeak() + ")."));
+                }
+                return true;
+            }
+
             if (!GuildChatParser.isGuildOnlineOutput(raw)) return true;
 
             var entries = GuildChatParser.parseChat(raw);

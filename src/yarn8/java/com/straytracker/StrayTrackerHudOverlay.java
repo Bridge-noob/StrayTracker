@@ -31,21 +31,26 @@ public final class StrayTrackerHudOverlay {
         if (tracker.isTracking()) {
             context.drawText(font, "§a● Started — polling /guild online every "
                     + StrayTrackerConfig.intervalSeconds + "s", x, y, 0xFFFFFF, true);
-            drawPeaks(context, font, x, y + 10, true);
+            int rows = drawPeaks(context, font, x, y + 10, true);
+            context.drawText(font, "§7Overall peak (join/leave): §a" + tracker.getJoinLeavePeak(),
+                    x, y + 10 + rows * 10 + 2, 0xFFFFFF, true);
         } else if (tracker.hasData()) {
             context.drawText(font, "§c● Stopped", x, y, 0xFFFFFF, true);
-            drawPeaks(context, font, x, y + 10, false);
+            int rows = drawPeaks(context, font, x, y + 10, false);
+            context.drawText(font, "§7Overall peak (join/leave): §a" + tracker.getJoinLeavePeak(),
+                    x, y + 10 + rows * 10 + 2, 0xFFFFFF, true);
         }
     }
 
     /** The peak list right below the status line — live while tracking, final afterwards. */
-    private void drawPeaks(DrawContext context, TextRenderer font, int x, int y, boolean live) {
+    private int drawPeaks(DrawContext context, TextRenderer font, int x, int y, boolean live) {
         List<Map.Entry<String, int[]>> peaks = tracker.sortedPeaks();
         if (peaks.isEmpty()) {
             if (live) {
                 context.drawText(font, "§7Waiting for the first /guild online response...", x, y, 0xA0A0A0, true);
+                return 1;
             }
-            return;
+            return 0;
         }
         int rows = Math.min(peaks.size(), StrayTrackerConfig.maxEntries);
         for (int i = 0; i < rows; i++) {
@@ -54,5 +59,6 @@ public final class StrayTrackerHudOverlay {
                     "§f" + e.getKey() + " §7• §a" + e.getValue()[0] + "/" + e.getValue()[1],
                     x, y + i * 10, 0xFFFFFF, true);
         }
+        return rows;
     }
 }
