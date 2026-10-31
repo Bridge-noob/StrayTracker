@@ -37,7 +37,7 @@ public final class StrayTrackerHudOverlay {
 
         // DIAGNOSTIC: must render if the overlay method is being called at all
         // (clamped so it is never drawn off-screen — old value y-12 landed at y=-2 with default hudY=10)
-        graphics.text(font, "§4§lSTRAYTRACKER OVERLAY ACTIVE §r", x, Math.max(y - 12, 40), 0xFFFF4444, true);
+        graphics.text(font, "§4§lSTRAYTRACKER OVERLAY ACTIVE §r", x, Math.max(y - 12, 40), 0xFFFF0000, true);
         if (renderCounter % 100 == 0) {
             java.util.logging.Logger.getLogger("StrayTracker").info("[StrayTracker] RED DIAG DRAWN");
         }
