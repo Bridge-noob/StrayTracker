@@ -6,11 +6,10 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
 public class StrayTrackerClient implements ClientModInitializer {
@@ -29,9 +28,7 @@ public class StrayTrackerClient implements ClientModInitializer {
 
         ClientTickEvents.END_CLIENT_TICK.register(this::onEndTick);
 
-        HudElementRegistry.addLast(
-                Identifier.of("straytracker", "hud"),
-                (context, tickCounter) -> overlay.render(context));
+        HudRenderCallback.EVENT.register((context, tickCounter) -> overlay.render(context));
 
         ClientReceiveMessageEvents.ALLOW_GAME.register((message, overlayVisible) -> {
             String raw = message.getString();
