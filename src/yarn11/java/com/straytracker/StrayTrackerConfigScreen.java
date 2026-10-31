@@ -42,6 +42,20 @@ public final class StrayTrackerConfigScreen extends Screen {
                 })
                 .dimensions(cx - 100, y + 72, 200, 20).build());
 
+        addDrawableChild(ButtonWidget.builder(Text.literal("HUD X: " + StrayTrackerConfig.hudX), b -> {
+                    StrayTrackerConfig.hudX += 10;
+                    StrayTrackerConfig.save();
+                    b.setMessage(Text.literal("HUD X: " + StrayTrackerConfig.hudX));
+                })
+                .dimensions(cx - 100, y + 120, 200, 20).build());
+
+        addDrawableChild(ButtonWidget.builder(Text.literal("HUD Y: " + StrayTrackerConfig.hudY), b -> {
+                    StrayTrackerConfig.hudY += 10;
+                    StrayTrackerConfig.save();
+                    b.setMessage(Text.literal("HUD Y: " + StrayTrackerConfig.hudY));
+                })
+                .dimensions(cx - 100, y + 144, 200, 20).build());
+
         addDrawableChild(ButtonWidget.builder(Text.literal("Done"), b -> close())
                 .dimensions(cx - 100, y + 96, 200, 20).build());
     }
