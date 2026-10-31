@@ -125,7 +125,7 @@ public final class PeakTracker {
             sb.append("§7No data recorded yet.");
         }
         for (Map.Entry<String, int[]> e : sortedPeaks()) {
-            sb.append("§f").append(e.getKey()).append(" §7• §a")
+            sb.append("§f").append(e.getKey()).append(" §7- §a")
               .append(e.getValue()[0]).append("/").append(e.getValue()[1]).append("§r\n");
         }
         return sb.toString().stripTrailing();

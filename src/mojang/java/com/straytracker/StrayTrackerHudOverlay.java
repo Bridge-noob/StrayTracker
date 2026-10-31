@@ -28,21 +28,19 @@ public final class StrayTrackerHudOverlay {
         if (client.options.hideGui || client.player == null) return;
 
         if (renderCounter % 100 == 0) {
-            java.util.logging.Logger.getLogger("StrayTracker").info("[StrayTracker] RED DIAG CHECKS PASSED — drawing now");
+            java.util.logging.Logger.getLogger("StrayTracker").info("[StrayTracker] RED DIAG CHECKS PASSED - drawing now");
         }
 
         Font font = client.font;
         int x = StrayTrackerConfig.hudX;
         int y = StrayTrackerConfig.hudY;
 
-        // DIAGNOSTIC: must render if the overlay method is being called at all
-        // (clamped so it is never drawn off-screen — old value y-12 landed at y=-2 with default hudY=10)
-        graphics.text(font, "§4§lSTRAYTRACKER OVERLAY ACTIVE §r", x, Math.max(y - 12, 40), 0xFFFF0000, true);
-        if (renderCounter % 100 == 0) {
-            java.util.logging.Logger.getLogger("StrayTracker").info("[StrayTracker] RED DIAG DRAWN");
-        }
-
         if (tracker.isTracking()) {
+            graphics.text(font, "§4§lSTRAYTRACKER OVERLAY ACTIVE §r", x, Math.max(y - 12, 40), 0xFFFF0000, true);
+            if (renderCounter % 100 == 0) {
+                java.util.logging.Logger.getLogger("StrayTracker").info("[StrayTracker] RED DIAG DRAWN");
+            }
+
             graphics.text(font, "§a* Started - polling /guild online every "
                     + StrayTrackerConfig.intervalSeconds + "s", x, y, 0xFFFFFFFF, true);
             int rows = drawPeaks(graphics, font, x, y + 10, true);
@@ -56,7 +54,7 @@ public final class StrayTrackerHudOverlay {
         }
     }
 
-    /** The peak list right below the status line — live while tracking, final afterwards. */
+    /** The peak list right below the status line - live while tracking, final afterwards. */
     private int drawPeaks(GuiGraphicsExtractor graphics, Font font, int x, int y, boolean live) {
         List<Map.Entry<String, int[]>> peaks = tracker.sortedPeaks();
         if (peaks.isEmpty()) {
