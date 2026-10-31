@@ -89,7 +89,7 @@ public class StrayTrackerClient implements ClientModInitializer {
             } else {
                 tracker.start();
                 autoRequestTimer = 0;
-                player.sendMessage(Text.literal("§aTracking started — auto-polling /guild online every "
+                player.sendMessage(Text.literal("§aTracking started - auto-polling /guild online every "
                         + StrayTrackerConfig.intervalSeconds + "s."), false);
             }
         }
@@ -100,7 +100,7 @@ public class StrayTrackerClient implements ClientModInitializer {
             tracker.start();
             autoTrackStarted = true;
             autoRequestTimer = 0;
-            player.sendMessage(Text.literal("§7[StrayTracker] §aAuto-tracking started — press §f-§a to stop."), false);
+            player.sendMessage(Text.literal("§7[StrayTracker] §aAuto-tracking started - press §f-§a to stop."), false);
         }
 
         // Auto-send "/guild online" on a timer while tracking

@@ -43,13 +43,13 @@ public final class StrayTrackerHudOverlay {
         }
 
         if (tracker.isTracking()) {
-            context.drawText(font, "§a● Started — polling /guild online every "
+            context.drawText(font, "§a* Started - polling /guild online every "
                     + StrayTrackerConfig.intervalSeconds + "s", x, y, 0xFFFFFF, true);
             int rows = drawPeaks(context, font, x, y + 10, true);
             context.drawText(font, "§7Overall peak: §a" + tracker.getOverallPeak(),
                     x, y + 10 + rows * 10 + 2, 0xFFFFFF, true);
         } else if (tracker.hasData()) {
-            context.drawText(font, "§c● Stopped", x, y, 0xFFFFFF, true);
+            context.drawText(font, "§c* Stopped", x, y, 0xFFFFFF, true);
             int rows = drawPeaks(context, font, x, y + 10, false);
             context.drawText(font, "§7Overall peak: §a" + tracker.getOverallPeak(),
                     x, y + 10 + rows * 10 + 2, 0xFFFFFF, true);
@@ -70,7 +70,7 @@ public final class StrayTrackerHudOverlay {
         for (int i = 0; i < rows; i++) {
             Map.Entry<String, int[]> e = peaks.get(i);
             context.drawText(font,
-                    "§f" + e.getKey() + " §7• §a" + e.getValue()[0] + "/" + e.getValue()[1],
+                    "§f" + e.getKey() + " §7- §a" + e.getValue()[0] + "/" + e.getValue()[1],
                     x, y + i * 10, 0xFFFFFF, true);
         }
         return rows;

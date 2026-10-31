@@ -49,12 +49,26 @@ public final class StrayTrackerConfigScreen extends Screen {
                 })
                 .bounds(cx - 100, y + 120, 200, 20).build());
 
+        addRenderableWidget(Button.builder(Component.literal("HUD X -10"), b -> {
+                    StrayTrackerConfig.hudX -= 10;
+                    StrayTrackerConfig.save();
+                    b.setMessage(Component.literal("HUD X: " + StrayTrackerConfig.hudX));
+                })
+                .bounds(cx - 100, y + 144, 200, 20).build());
+
         addRenderableWidget(Button.builder(Component.literal("HUD Y: " + StrayTrackerConfig.hudY), b -> {
                     StrayTrackerConfig.hudY += 10;
                     StrayTrackerConfig.save();
                     b.setMessage(Component.literal("HUD Y: " + StrayTrackerConfig.hudY));
                 })
-                .bounds(cx - 100, y + 144, 200, 20).build());
+                .bounds(cx - 100, y + 168, 200, 20).build());
+
+        addRenderableWidget(Button.builder(Component.literal("HUD Y -10"), b -> {
+                    StrayTrackerConfig.hudY -= 10;
+                    StrayTrackerConfig.save();
+                    b.setMessage(Component.literal("HUD Y: " + StrayTrackerConfig.hudY));
+                })
+                .bounds(cx - 100, y + 192, 200, 20).build());
 
         addRenderableWidget(Button.builder(Component.literal("Done"), b -> onClose())
                 .bounds(cx - 100, y + 96, 200, 20).build());
