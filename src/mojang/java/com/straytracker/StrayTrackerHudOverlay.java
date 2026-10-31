@@ -19,7 +19,8 @@ public final class StrayTrackerHudOverlay {
     public void render(GuiGraphicsExtractor graphics) {
         renderCounter++;
         if (renderCounter % 100 == 0) {
-            java.util.logging.Logger.getLogger("StrayTracker").info("[StrayTracker] HUD render invoked (count=" + renderCounter + ")");
+            Minecraft client = Minecraft.getInstance();
+            java.util.logging.Logger.getLogger("StrayTracker").info("[StrayTracker] HUD render invoked (count=" + renderCounter + ") hudEnabled=" + StrayTrackerConfig.hudEnabled + " hideGui=" + client.options.hideGui + " playerNull=" + (client.player == null));
         }
         if (!StrayTrackerConfig.hudEnabled) return;
 
