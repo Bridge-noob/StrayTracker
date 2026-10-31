@@ -10,12 +10,17 @@ import java.util.Map;
 /** In-game HUD: tracking status + live sorted peak list. */
 public final class StrayTrackerHudOverlay {
     private final PeakTracker tracker;
+    private int renderCounter = 0;
 
     public StrayTrackerHudOverlay(PeakTracker tracker) {
         this.tracker = tracker;
     }
 
     public void render(DrawContext context) {
+        renderCounter++;
+        if (renderCounter % 100 == 0) {
+            java.util.logging.Logger.getLogger("StrayTracker").info("[StrayTracker] HUD render invoked (count=" + renderCounter + ")");
+        }
         if (!StrayTrackerConfig.hudEnabled) return;
 
         MinecraftClient client = MinecraftClient.getInstance();
