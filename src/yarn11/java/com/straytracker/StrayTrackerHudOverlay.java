@@ -27,6 +27,10 @@ public final class StrayTrackerHudOverlay {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.options.hudHidden || client.player == null) return;
 
+        if (renderCounter % 100 == 0) {
+            java.util.logging.Logger.getLogger("StrayTracker").info("[StrayTracker] RED DIAG CHECKS PASSED — drawing now");
+        }
+
         TextRenderer font = client.textRenderer;
         int x = StrayTrackerConfig.hudX;
         int y = StrayTrackerConfig.hudY;
@@ -34,6 +38,9 @@ public final class StrayTrackerHudOverlay {
         // DIAGNOSTIC: must render if the overlay method is being called at all
         // (clamped so it is never drawn off-screen — old value y-12 landed at y=-2 with default hudY=10)
         context.drawText(font, "§4§lSTRAYTRACKER OVERLAY ACTIVE §r", x, Math.max(y - 12, 40), 0xFF4444, true);
+        if (renderCounter % 100 == 0) {
+            java.util.logging.Logger.getLogger("StrayTracker").info("[StrayTracker] RED DIAG DRAWN");
+        }
 
         if (tracker.isTracking()) {
             context.drawText(font, "§a● Started — polling /guild online every "
