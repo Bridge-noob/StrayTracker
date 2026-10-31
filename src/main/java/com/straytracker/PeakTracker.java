@@ -17,13 +17,19 @@ public final class PeakTracker {
     private int joinLeavePeak = 0;
     /** Highest /guild online snapshot count seen during tracking. */
     private int guildOnlinePeak = 0;
+    /** Current online count for the tracked guild during this tracking session. */
+    private int currentOnline = 0;
+    /** Players who joined during this tracking session (ever). */
+    private final Set<String> joinedEver = new HashSet<>();
 
     public void start() {
         tracking = true;
         peaks.clear();
         onlineGuildMembers.clear();
+        joinedEver.clear();
         joinLeavePeak = 0;
         guildOnlinePeak = 0;
+        currentOnline = 0;
     }
 
     public void stop() {
@@ -34,15 +40,18 @@ public final class PeakTracker {
         return tracking;
     }
 
-    /** Records a guild member joining — updates the online set and the running peak. */
+    /** Records a guild member joining — adds new joiners, skips repeat joiners. */
     public void recordJoin(String player) {
         if (player == null || player.isEmpty() || !tracking) return;
-        onlineGuildMembers.add(player);
-        joinLeavePeak = Math.max(joinLeavePeak, onlineGuildMembers.size());
+        if (joinedEver.add(player)) {
+            currentOnline++;
+            joinLeavePeak = Math.max(joinLeavePeak, currentOnline);
+        }
     }
 
-    /** Records a guild member leaving — removes them from the online set. */
+    /** Records a guild member leaving — peak keeps its value, count stays as-is. */
     public void recordLeave(String player) {
+        // Intentionally unchanged: leave does not decrement currentOnline.
         if (player == null || player.isEmpty() || !tracking) return;
         onlineGuildMembers.remove(player);
     }
@@ -54,6 +63,11 @@ public final class PeakTracker {
     /** Highest /guild online snapshot count seen during tracking. */
     public int getGuildOnlinePeak() {
         return guildOnlinePeak;
+    }
+
+    /** Current online count for the tracked guild during this tracking session. */
+    public int getCurrentOnline() {
+        return currentOnline;
     }
 
     /** Currently-tracked number of distinct guild members online (from join/leave messages). */
@@ -78,6 +92,10 @@ public final class PeakTracker {
             }
             if (isTrackedGuild(e)) {
                 guildOnlinePeak = Math.max(guildOnlinePeak, e.online());
+                // Snapshot for the tracked guild = authoritative current online count
+                // (this seeds the baseline at tracking start and refreshes during tracking).
+                currentOnline = e.online();
+                joinLeavePeak = Math.max(joinLeavePeak, currentOnline);
             }
         }
     }
